@@ -8,4 +8,5 @@ from rest_framework.decorators import api_view
 @csrf_exempt
 @api_view(["GET"])
 def rooms(request):
-    return JsonResponse("Testing the rooms endpoint for the first time")
+    message = "Testing the rooms endpoint for the first time"
+    return JsonResponse( message, safe=False)

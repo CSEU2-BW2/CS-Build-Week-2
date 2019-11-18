@@ -19,5 +19,5 @@ from . import api
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url('rooms', api.rooms)
+    url('^rooms/', api.rooms)
 ]

@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.conf.urls import include
 from . import api
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url('^rooms/', api.rooms)
+    url(r'^treasure/', include('TreasureHunt.urls'))
 ]

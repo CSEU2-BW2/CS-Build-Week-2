@@ -100,5 +100,28 @@ last_proof = response.get('proof')
 last_block = response
 last_block_string = json.dumps(last_block, sort_keys=True).encode()
 
+ def proof_work(last_proof=47616702, new_proof=0, n=6):
+        """
+        takes in the last proof and new proof, level of difficulty - n
+        if hash(last_proof, new_proof) begins with n leading zero
+        return proof
+        """
+        pass
+
+# while not True:
+#     if lambda_coin.valid_proof(last_proof, last_block_string):
+#         return
+
+# {
+#     'proof': -47616702,
+#     'difficulty': 6,
+#     'cooldown': 1.0,
+#     'messages': [],
+#     'errors': []
+# }
+
+# valid prove 
+# Set proof to an integer then increment
+
 
 

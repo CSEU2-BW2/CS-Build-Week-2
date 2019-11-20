@@ -1,11 +1,7 @@
 import time
 import json
 import hashlib
-from time import time
-from uuid import uuid4
 import requests
-
-import sys
 
 
 class Blockchain(object):
@@ -71,21 +67,17 @@ class Blockchain(object):
         return hex_hash
 
     @staticmethod
-    def valid_proof(last_proof, new_proof, difficulty=int()):
+    def valid_proof(last_proof, proof, difficulty):
         """
-        Validates the Proof: Does hash(last_proof, new_proof) 
-        contain N leading zeroes, where N is the current difficulty level?
-        :param last_proof: 
-        :param new_proof: <int?> The value that when combined with the
-        stringified previous block results in a hash that has the
-        correct number of leading zeroes.
-        :return: True if the resulting hash is a valid proof, False otherwise
+        Validates the Proof:  Does hash(last_proof, proof) contain 4
+        leading zeroes?
         """
-        guess = f'{last_proof}{new_proof}'.encode()
+        # encode a guess
+        guess = f"{last_proof}{proof}".encode()
+        # hashing the guess
         guess_hash = hashlib.sha256(guess).hexdigest()
-        return guess_hash[:difficulty] == "0" * difficulty
-
-   
+        # return True if the last 4 digits of the hash ar zreos
+        return guess_hash[:6] == "0" * difficulty
 
 
 # Todo: Get new proof
@@ -93,35 +85,27 @@ class Blockchain(object):
 lambda_coin = Blockchain()
 
 response = lambda_coin.get_proof()
-print(response)
+# print(response)
 response.update({"timestamp": time()})
 difficulty = response.get('difficulty')
 last_proof = response.get('proof')
 last_block = response
 last_block_string = json.dumps(last_block, sort_keys=True).encode()
 
- def proof_work(last_proof=47616702, new_proof=0, n=6):
-        """
+# proof = lambda_coin.valid_proof(47616702, 1, 6)
+# print(proof)
+
+
+def proof_work(last_proof=47616702, new_proof=1, n=6):
+    """
         takes in the last proof and new proof, level of difficulty - n
         if hash(last_proof, new_proof) begins with n leading zero
         return proof
         """
-        pass
-
-# while not True:
-#     if lambda_coin.valid_proof(last_proof, last_block_string):
-#         return
-
-# {
-#     'proof': -47616702,
-#     'difficulty': 6,
-#     'cooldown': 1.0,
-#     'messages': [],
-#     'errors': []
-# }
-
-# valid prove 
-# Set proof to an integer then increment
+    if lambda_coin.valid_proof(last_proof, new_proof, n):
+        return (new_proof)
+    else:
+        ne
 
 
-
+print(proof_work())

@@ -60,7 +60,31 @@ class Blockchain(object):
         response_json = response.json()
         return response_json
 
-   
+    @staticmethod
+    def hash(block):
+        string_object = json.dumps(block, sort_keys=True)
+        block_string = string_object.encode()
+
+        raw_hash = hashlib.sha256(block_string)
+        hex_hash = raw_hash.hexdigest()
+
+        return hex_hash
+
+    @staticmethod
+    def valid_proof(last_proof, new_proof, difficulty=int()):
+        """
+        Validates the Proof: Does hash(last_proof, new_proof) 
+        contain N leading zeroes, where N is the current difficulty level?
+        :param last_proof: 
+        :param new_proof: <int?> The value that when combined with the
+        stringified previous block results in a hash that has the
+        correct number of leading zeroes.
+        :return: True if the resulting hash is a valid proof, False otherwise
+        """
+        guess = f'{last_proof}{new_proof}'.encode()
+        guess_hash = hashlib.sha256(guess).hexdigest()
+        return guess_hash[:difficulty] == "0" * difficulty
+
    
 
 

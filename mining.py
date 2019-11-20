@@ -50,6 +50,16 @@ class Blockchain(object):
         hex_hash = raw_hash.hexdigest()
         return hex_hash
 
+    def get_proof(self):
+        response = requests.get(
+            'https://lambda-treasure-hunt.herokuapp.com/api/bc/last_proof/',
+            headers={
+                "Authorization":
+                "Token 09c8d609debf1f798768afe66b8039f37fec5e67"
+            })
+        response_json = response.json()
+        return response_json
+
    
    
 

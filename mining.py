@@ -90,4 +90,15 @@ class Blockchain(object):
 
 # Todo: Get new proof
 
+lambda_coin = Blockchain()
+
+response = lambda_coin.get_proof()
+print(response)
+response.update({"timestamp": time()})
+difficulty = response.get('difficulty')
+last_proof = response.get('proof')
+last_block = response
+last_block_string = json.dumps(last_block, sort_keys=True).encode()
+
+
 

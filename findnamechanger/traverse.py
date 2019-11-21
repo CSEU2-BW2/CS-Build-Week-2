@@ -95,6 +95,9 @@ def traverse():
 
 def changeName():
     print("NAMECHANGER")
+
+    time.sleep(cooldown)
+
     res = requests.post('https://lambda-treasure-hunt.herokuapp.com/api/adv/change_name/',
                         headers={'Authorization': str(os.getenv('authToken'))},
                         json={'name': 'BestTeam: Sorin the Mentor, Thorben the Hero, Wasiu the Great, Damola the Warrior, Shola the Wizard, Inaki the other Hero', 'confirm': 'aye'}
@@ -102,6 +105,9 @@ def changeName():
 
 def pray():
     print("SHRINE")
+
+    time.sleep(cooldown)
+    
     res = requests.post('https://lambda-treasure-hunt.herokuapp.com/api/adv/pray/',
                         headers={'Authorization': str(os.getenv('authToken'))},
                         json={"confirm": "yes"}

@@ -96,6 +96,9 @@ def traverse():
 
 def pray():
     print("SHRINE")
+
+    time.sleep(cooldown)
+    
     res = requests.post('https://lambda-treasure-hunt.herokuapp.com/api/adv/pray/',
                         headers={'Authorization': str(os.getenv('authToken'))},
                         json={"confirm": "yes"}

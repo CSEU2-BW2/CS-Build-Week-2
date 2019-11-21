@@ -61,9 +61,7 @@ def traverse(room):
             break
 
         if currentRoom['room_id'] == 461:
-            pray()
-            break
-            
+            pray()            
 
         connection = connections[str(currentRoom['room_id'])][1]
 
@@ -101,6 +99,8 @@ def pray():
                         headers={'Authorization': str(os.getenv('authToken'))},
                         json={"confirm": "yes"}
                         )
+    res = res.json()
+    time.sleep(res['cooldown'])
 
 def move(dir):
 

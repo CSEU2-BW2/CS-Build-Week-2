@@ -96,14 +96,16 @@ def traverse(room):
 def pray():
     print("SHRINE")
 
+    global cooldown
     time.sleep(cooldown)
-    
+
     res = requests.post('https://lambda-treasure-hunt.herokuapp.com/api/adv/pray/',
                         headers={'Authorization': str(os.getenv('authToken'))},
                         json={"confirm": "yes"}
                         )
     res = res.json()
-    time.sleep(res['cooldown'])
+
+    cooldown = res['cooldown']
 
 def move(dir):
 

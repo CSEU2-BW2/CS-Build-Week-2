@@ -49,14 +49,15 @@ def start():
     except:
         return
 
-def traverse():
+def traverse(room):
+    print(f"Moving to room {room}")
 
     global goBackCache
 
     while len(visitedIds) < 500:
 
         print(currentRoom['room_id'])
-        if currentRoom['room_id'] == 188:
+        if currentRoom['room_id'] == room:
             break
 
         if currentRoom['room_id'] == 461:
@@ -163,8 +164,8 @@ def upateFile():
     f.close()
 
 
-
+room = input("what is your room?")
 start()
 init()
-traverse()
+traverse(room)
 

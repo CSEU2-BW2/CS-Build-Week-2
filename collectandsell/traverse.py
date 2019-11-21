@@ -55,6 +55,10 @@ def traverse():
 
     while len(visitedIds) < 500:
 
+        print(currentRoom['room_id'])
+        if currentRoom['room_id'] is 461:
+            pray()
+
         connection = connections[str(currentRoom['room_id'])][1]
 
         if 'n' in currentRoom['exits'] and connection['n'] not in visitedIds:
@@ -84,6 +88,20 @@ def traverse():
                     break
         else:
             break
+
+def pray():
+    print("SHRINE")
+
+    global cooldown
+    time.sleep(cooldown)
+
+    res = requests.post('https://lambda-treasure-hunt.herokuapp.com/api/adv/pray/',
+                        headers={'Authorization': str(os.getenv('authToken'))},
+                        json={"confirm": "yes"}
+                        )
+    res = res.json()
+
+    cooldown = res['cooldown']
 
 
 def move(dir):

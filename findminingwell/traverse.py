@@ -62,7 +62,6 @@ def traverse():
 
         if currentRoom['room_id'] is 461:
             pray()
-            break
             
 
         connection = connections[str(currentRoom['room_id'])][1]
@@ -96,9 +95,18 @@ def traverse():
             break
 
 def pray():
+    print("SHRINE")
+
+    global cooldown
+    time.sleep(cooldown)
+
     res = requests.post('https://lambda-treasure-hunt.herokuapp.com/api/adv/pray/',
-                        headers={'Authorization': str(os.getenv('authToken'))}
+                        headers={'Authorization': str(os.getenv('authToken'))},
+                        json={"confirm": "yes"}
                         )
+    res = res.json()
+
+    cooldown = res['cooldown']
 
 def move(dir):
 

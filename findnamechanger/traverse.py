@@ -60,7 +60,7 @@ def traverse():
             break
 
         if currentRoom['room_id'] == 461:
-            break
+            pray()
             
 
         connection = connections[str(currentRoom['room_id'])][1]
@@ -93,21 +93,19 @@ def traverse():
         else:
             break
 
-def changeName():
-    print("NAMECHANGER")
-    res = requests.post('https://lambda-treasure-hunt.herokuapp.com/api/adv/change_name/',
-                        headers={'Authorization': str(os.getenv('authToken'))},
-                        json={'name': 'BestTeam: Sorin the Mentor, Thorben the Hero, Wasiu the Great, Damola the Warrior, Shola the Wizard, Inaki the other Hero', 'confirm': 'aye'}
-                        )
-
 def pray():
     print("SHRINE")
+
+    global cooldown
+    time.sleep(cooldown)
+
     res = requests.post('https://lambda-treasure-hunt.herokuapp.com/api/adv/pray/',
                         headers={'Authorization': str(os.getenv('authToken'))},
                         json={"confirm": "yes"}
                         )
-    res = res.json
-    time.sleep(res['cooldown'])
+    res = res.json()
+    
+    cooldown = res['cooldown']
 
 def move(dir):
 

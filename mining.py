@@ -36,6 +36,37 @@ class Blockchain(object):
         # return True if the last 4 digits of the hash ar zreos
         return guess_hash[:6] == "0" * difficulty
 
+    def proof_of_work(self):
+        while True:
+            # TODO: Get the last proof from the server and look for a new one
+            request = requests.get(
+                'https://lambda-treasure-hunt.herokuapp.com/api/bc/last_proof/',
+                headers={
+                    "Authorization":
+                    "Token 09c8d609debf1f798768afe66b8039f37fec5e67"
+                })
+            last_proof = request.json()['proof']
+            difficulty = request.json()['difficulty']
+            print(f"last proof is {last_proof}")
+            proof = 0
+            while self.valid_proof(last_proof, proof, difficulty) is False:
+                proof += 1
+                # TODO: When found, POST it to the server {"proof": new_proof}
+                # TODO: If the server responds with 'New Block Forged'
+                response = requests.post(
+                    'https://lambda-treasure-hunt.herokuapp.com/api/bc/mine/',
+                    headers={
+                        "Authorization":
+                        "Token 09c8d609debf1f798768afe66b8039f37fec5e67"
+                    },
+                    json={'proof': proof})
+                if response.json()['errors'] is None:
+                    return ('Created the proof')
+                # add 1 to the number of coins mined and print it.  Otherwise,
+                # print the message from the server.
+                else:
+                    return (response.json()['errors'])
+
     def get_balance(self):
         balance = requests.get(
             'https://lambda-treasure-hunt.herokuapp.com/api/bc/get_balance/',
@@ -48,42 +79,18 @@ class Blockchain(object):
         else:
             print("Error", balance.json()["errors"])
 
+    def transmogrify(self):
+        response = requests.post(
+            'https://lambda-treasure-hunt.herokuapp.com/api/adv/transmogrify/',
+            headers={
+                "Authorization":
+                "Token 09c8d609debf1f798768afe66b8039f37fec5e67"
+            },
+            json={"name": "[NAME OF ITEM]"})
+        return response.json()
+
 
 # Todo: Get new proof
 
 lambda_coin = Blockchain()
-
-if __name__ == '__main__':
-    coins_mined = 0
-    # Run forever until interrupted
-    while True:
-        # TODO: Get the last proof from the server and look for a new one
-        request = requests.get(
-            'https://lambda-treasure-hunt.herokuapp.com/api/bc/last_proof/',
-            headers={
-                "Authorization":
-                "Token 09c8d609debf1f798768afe66b8039f37fec5e67"
-            })
-        last_proof = request.json()['proof']
-        difficulty = request.json()['difficulty']
-        print(f"last proof is {last_proof}")
-        proof = 0
-        while lambda_coin.valid_proof(last_proof, proof, difficulty) is False:
-            proof += 1
-            # TODO: When found, POST it to the server {"proof": new_proof}
-            # TODO: If the server responds with 'New Block Forged'
-            response = requests.post(
-                'https://lambda-treasure-hunt.herokuapp.com/api/bc/mine/',
-                headers={
-                    "Authorization":
-                    "Token 09c8d609debf1f798768afe66b8039f37fec5e67"
-                },
-                json={'proof': proof})
-            print(response.json())
-            if response.json()['errors'] is None:
-                coins_mined += 1
-                print('Created the proof')
-            # add 1 to the number of coins mined and print it.  Otherwise,
-            # print the message from the server.
-            else:
-                print(response.json()['errors'])
+print(lambda_coin.proof_of_work())

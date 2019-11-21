@@ -57,31 +57,29 @@ def traverse():
 
         print(currentRoom['room_id'])
         if currentRoom['room_id'] == 467:
-            changeName()
             break
 
         if currentRoom['room_id'] == 461:
-            pray()
             break
             
 
         connection = connections[str(currentRoom['room_id'])][1]
 
-        if 'n' in currentRoom['exits'] and connection['n'] not in visitedIds:
-            goBackCache.append('s')
-            move('n')
+        if 's' in currentRoom['exits'] and connection['s'] not in visitedIds:
+            goBackCache.append('n')
+            move('s')
 
         elif 'e' in currentRoom['exits'] and connection['e'] not in visitedIds:
             goBackCache.append('w')
             move('e')
 
-        elif 's' in currentRoom['exits'] and connection['s'] not in visitedIds:
-            goBackCache.append('n')
-            move('s')
-
         elif 'w' in currentRoom['exits'] and connection['w'] not in visitedIds:
             goBackCache.append('e')
             move('w')
+
+        elif 'n' in currentRoom['exits'] and connection['n'] not in visitedIds:
+            goBackCache.append('s')
+            move('n')
 
         elif len(visitedIds) < 500:
             while len(goBackCache) > 0:
@@ -108,6 +106,8 @@ def pray():
                         headers={'Authorization': str(os.getenv('authToken'))},
                         json={"confirm": "yes"}
                         )
+    res = res.json
+    time.sleep(res['cooldown'])
 
 def move(dir):
 

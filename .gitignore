@@ -123,6 +123,8 @@ dmypy.json
 #various
 .vscode
 .env
+roominfo.json
+goBackCache.json
 
 #ls8
 .binary.ls8

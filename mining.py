@@ -26,8 +26,8 @@ class Blockchain(object):
     @staticmethod
     def valid_proof(last_proof, proof, difficulty):
         """
-        Validates the Proof:  Does hash(last_proof, proof) contain 4
-        leading zeroes?
+        Validates the Proof:  Does hash(last_proof, proof) 
+        contain n level of difficulty leading zeroes?
         """
         # encode a guess
         guess = f"{last_proof}{proof}".encode()
@@ -36,7 +36,7 @@ class Blockchain(object):
         # return True if the last 4 digits of the hash ar zreos
         return guess_hash[:6] == "0" * difficulty
 
-    def proof_of_work(self):
+    def mine(self):
         while True:
             # TODO: Get the last proof from the server and look for a new one
             request = requests.get(
@@ -93,4 +93,4 @@ class Blockchain(object):
 # Todo: Get new proof
 
 lambda_coin = Blockchain()
-print(lambda_coin.proof_of_work())
+print(lambda_coin.mine())

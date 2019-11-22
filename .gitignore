@@ -119,4 +119,14 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+
+#various
+.vscode
+.env
+roominfo.json
+goBackCache.json
+
+#ls8
+.binary.ls8
+
 # End of https://www.gitignore.io/api/django

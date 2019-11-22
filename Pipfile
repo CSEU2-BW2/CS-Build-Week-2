@@ -8,6 +8,8 @@ yapf = "*"
 
 [packages]
 requests = "*"
+python-dotenv = "*"
+schedule = "*"
 
 [requires]
 python_version = "3.7"

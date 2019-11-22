@@ -5,17 +5,18 @@ import os
 import json
 import random
 import hashlib
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 
 
 lastProof = 0
-difficulty = 0 
+difficulty = 0
 leadingZeros = "0"
+
 
 def init():
     res = requests.get('https://lambda-treasure-hunt.herokuapp.com/api/bc/last_proof/',
-                       headers={'Authorization': str(os.getenv("authToken"))})
+                       headers={'Authorization': "Token 09c8d609debf1f798768afe66b8039f37fec5e67"})
 
     if res:
         global lastProof
@@ -31,6 +32,7 @@ def init():
 
         time.sleep(res['cooldown'])
 
+
 def mine():
     global lastProof
     global difficulty
@@ -40,7 +42,6 @@ def mine():
     encoded = f'{lastProof}{guess}'.encode()
     hashed = hashlib.sha256(encoded).hexdigest()
 
-
     while hashed[:difficulty] != leadingZeros:
         guess += 1
         encoded = f'{lastProof}{guess}'.encode()
@@ -49,7 +50,8 @@ def mine():
     print(hashed)
 
     res = requests.post('https://lambda-treasure-hunt.herokuapp.com/api/bc/mine/',
-                        headers={'Authorization': str(os.getenv('authToken'))},
+                        headers={
+                            'Authorization': "Token 09c8d609debf1f798768afe66b8039f37fec5e67"},
                         json={'proof': guess}
                         )
     print(res)

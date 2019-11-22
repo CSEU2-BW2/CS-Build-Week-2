@@ -14,6 +14,7 @@ count = 0
 roomsInfo = []
 goBackCache = []
 
+
 def start():
     global currentRoom
     currentRoom = None
@@ -21,7 +22,7 @@ def start():
     cooldown = 0
     global visitedIds
     visitedIds = set()
-    global count 
+    global count
     count = 0
     global roomsInfo
     roomsInfo = []
@@ -39,15 +40,15 @@ def start():
             prevData = json.load(jsonFile)
             for el in prevData:
                 goBackCache.append(el)
-                    
+
         count = 0
 
-        print("moves:", count, " len(visited):", len(visitedIds), " len(roomsInfo):", len(roomsInfo))
-
-
+        print("moves:", count, " len(visited):", len(
+            visitedIds), " len(roomsInfo):", len(roomsInfo))
 
     except:
         return
+
 
 def traverse():
 
@@ -89,6 +90,7 @@ def traverse():
         else:
             break
 
+
 def pray():
     print("SHRINE")
 
@@ -110,9 +112,11 @@ def move(dir):
 
     try:
         res = requests.post('https://lambda-treasure-hunt.herokuapp.com/api/adv/move/',
-                        headers={'Authorization': str(os.getenv('authToken'))},
-                        json={'direction': dir, 'next_room_id': str(connections[str(currentRoom["room_id"])][1][dir])}
-                        )
+                            headers={'Authorization': str(
+                                os.getenv('authToken'))},
+                            json={'direction': dir, 'next_room_id': str(
+                                connections[str(currentRoom["room_id"])][1][dir])}
+                            )
         res.raise_for_status()
     except Exception as err:
         print(err)
@@ -130,7 +134,7 @@ def init():
 
 
 def handleRes(res):
-    if res:    
+    if res:
         global cooldown
         res = res.json()
         if len(res['items']) is not 0:
@@ -139,32 +143,35 @@ def handleRes(res):
                 time.sleep(cooldown)
                 try:
                     resTwo = requests.post('https://lambda-treasure-hunt.herokuapp.com/api/adv/take/',
-                        headers={'Authorization': str(os.getenv('authToken'))},
-                        json={'name': 'tiny treasure'}
-                        )
+                                           headers={'Authorization': str(
+                                               os.getenv('authToken'))},
+                                           json={'name': 'tiny treasure'}
+                                           )
 
                     resTwo = resTwo.json()
                     cooldown = resTwo['cooldown']
                     print("one more tiny treasure")
-        
+
         cooldown = res['cooldown']
         del res['cooldown']
         del res['players']
 
         global currentRoom
         currentRoom = res
-        
+
         global visitedIds
         global count
         count += 1
-        
+
         if res['room_id'] not in visitedIds:
-            global roomsInfo 
+            global roomsInfo
             roomsInfo.append(res)
             visitedIds.add(res['room_id'])
-            print("moves:", count, " len(visited):", len(visitedIds), " len(roomsInfo):", len(roomsInfo))   
-            
+            print("moves:", count, " len(visited):", len(
+                visitedIds), " len(roomsInfo):", len(roomsInfo))
+
     upateFile()
+
 
 def upateFile():
     global roomsInfo
@@ -178,9 +185,8 @@ def upateFile():
     f.close()
 
 
-
 # start()
-time.sleep(16) #cooldown is lost upon break of functionality so this needs to be hardcoded
+# cooldown is lost upon break of functionality so this needs to be hardcoded
+time.sleep(16)
 init()
 traverse()
-

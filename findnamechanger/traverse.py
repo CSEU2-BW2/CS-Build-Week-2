@@ -3,8 +3,8 @@ import requests
 import time
 import os
 import json
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 
 
 currentRoom = None
@@ -14,6 +14,7 @@ count = 0
 roomsInfo = []
 goBackCache = []
 
+
 def start():
     global currentRoom
     currentRoom = None
@@ -21,7 +22,7 @@ def start():
     cooldown = 0
     global visitedIds
     visitedIds = set()
-    global count 
+    global count
     count = 0
     global roomsInfo
     roomsInfo = []
@@ -39,15 +40,15 @@ def start():
             prevData = json.load(jsonFile)
             for el in prevData:
                 goBackCache.append(el)
-                    
+
         count = 0
 
-        print("moves:", count, " len(visited):", len(visitedIds), " len(roomsInfo):", len(roomsInfo))
-
-
+        print("moves:", count, " len(visited):", len(
+            visitedIds), " len(roomsInfo):", len(roomsInfo))
 
     except:
         return
+
 
 def traverse():
 
@@ -61,7 +62,6 @@ def traverse():
 
         if currentRoom['room_id'] == 461:
             pray()
-            
 
         connection = connections[str(currentRoom['room_id'])][1]
 
@@ -93,6 +93,7 @@ def traverse():
         else:
             break
 
+
 def pray():
     print("SHRINE")
 
@@ -100,12 +101,14 @@ def pray():
     time.sleep(cooldown)
 
     res = requests.post('https://lambda-treasure-hunt.herokuapp.com/api/adv/pray/',
-                        headers={'Authorization': str(os.getenv('authToken'))},
+                        headers={
+                            'Authorization': "Token 09c8d609debf1f798768afe66b8039f37fec5e67"},
                         json={"confirm": "yes"}
                         )
     res = res.json()
-    
+
     cooldown = res['cooldown']
+
 
 def move(dir):
 
@@ -113,9 +116,11 @@ def move(dir):
 
     try:
         res = requests.post('https://lambda-treasure-hunt.herokuapp.com/api/adv/move/',
-                        headers={'Authorization': str(os.getenv('authToken'))},
-                        json={'direction': dir, 'next_room_id': str(connections[str(currentRoom["room_id"])][1][dir])}
-                        )
+                            headers={
+                                'Authorization': "Token 09c8d609debf1f798768afe66b8039f37fec5e67"},
+                            json={'direction': dir, 'next_room_id': str(
+                                connections[str(currentRoom["room_id"])][1][dir])}
+                            )
         res.raise_for_status()
     except Exception as err:
         print(err)
@@ -127,16 +132,16 @@ def init():
     time.sleep(cooldown)
 
     res = requests.get('https://lambda-treasure-hunt.herokuapp.com/api/adv/status/api/adv/init/',
-                       headers={'Authorization': str(os.getenv("authToken"))})
+                       headers={'Authorization': "Token 09c8d609debf1f798768afe66b8039f37fec5e67"})
 
     handleRes(res)
 
 
 def handleRes(res):
-    if res:    
-        
+    if res:
+
         res = res.json()
-        
+
         global cooldown
         cooldown = res['cooldown']
         del res['cooldown']
@@ -144,18 +149,20 @@ def handleRes(res):
 
         global currentRoom
         currentRoom = res
-        
+
         global visitedIds
         global count
         count += 1
-        
+
         if res['room_id'] not in visitedIds:
-            global roomsInfo 
+            global roomsInfo
             roomsInfo.append(res)
             visitedIds.add(res['room_id'])
-            print("moves:", count, " len(visited):", len(visitedIds), " len(roomsInfo):", len(roomsInfo))   
-            
+            print("moves:", count, " len(visited):", len(
+                visitedIds), " len(roomsInfo):", len(roomsInfo))
+
     upateFile()
+
 
 def upateFile():
     global roomsInfo
@@ -169,8 +176,6 @@ def upateFile():
     f.close()
 
 
-
 start()
 init()
 traverse()
-

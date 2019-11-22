@@ -3,8 +3,8 @@ import requests
 import time
 import os
 import json
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 
 
 currentRoom = None
@@ -103,7 +103,7 @@ def pray():
     time.sleep(cooldown)
 
     res = requests.post('https://lambda-treasure-hunt.herokuapp.com/api/adv/pray/',
-                        headers={'Authorization': str(os.getenv('authToken'))},
+                        headers={'Authorization': "Token 09c8d609debf1f798768afe66b8039f37fec5e67"},
                         json={"confirm": "yes"}
                         )
     res = res.json()
@@ -116,7 +116,7 @@ def move(dir):
 
     try:
         res = requests.post('https://lambda-treasure-hunt.herokuapp.com/api/adv/move/',
-                        headers={'Authorization': str(os.getenv('authToken'))},
+                        headers={'Authorization': "Token 09c8d609debf1f798768afe66b8039f37fec5e67"},
                         json={'direction': dir, 'next_room_id': str(connections[str(currentRoom["room_id"])][1][dir])}
                         )
         res.raise_for_status()
@@ -130,7 +130,7 @@ def init():
     time.sleep(cooldown)
 
     res = requests.get('https://lambda-treasure-hunt.herokuapp.com/api/adv/status/api/adv/init/',
-                       headers={'Authorization': str(os.getenv("authToken"))})
+                       headers={'Authorization': "Token 09c8d609debf1f798768afe66b8039f37fec5e67"})
 
     handleRes(res)
 
